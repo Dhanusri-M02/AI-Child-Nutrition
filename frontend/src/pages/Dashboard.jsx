@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "../styles/Dashboard.css";
+import API_URL from "../config";
 
 function Dashboard() {
   const [sex, setSex] = useState("");
@@ -17,7 +18,7 @@ function Dashboard() {
     setAdvice("");
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/predict", {
+      const response = await fetch(`${API_URL}/predict`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

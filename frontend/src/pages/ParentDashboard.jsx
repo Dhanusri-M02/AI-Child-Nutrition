@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUser, logout, getUserName } from "../utils/auth";
 import "../styles/Dashboard.css";
+import API_URL from "../config";
 
 function ParentDashboard() {
   const user = getUser();
@@ -33,7 +34,7 @@ function ParentDashboard() {
   const loadChildren = async () => {
     try {
       console.log("Loading children for user_id:", user.user_id);
-      const res = await fetch(`http://127.0.0.1:5000/children?parent_id=${user.user_id}`);
+      const res = await fetch(`${API_URL}/children?parent_id=${user.user_id}`);
       console.log("Response status:", res.status);
       
       if (res.ok) {
@@ -53,7 +54,7 @@ function ParentDashboard() {
 
   const loadHealthRecords = async (childId) => {
     try {
-      const res = await fetch(`http://127.0.0.1:5000/health-records?child_id=${childId}`);
+      const res = await fetch(`${API_URL}/health-records?child_id=${childId}`);
       if (res.ok) {
         const data = await res.json();
         setHealthRecords(data);
@@ -85,7 +86,7 @@ function ParentDashboard() {
       
       console.log("Sending child data:", childData);
 
-      const res = await fetch("http://127.0.0.1:5000/children", {
+      const res = await fetch(`${API_URL}/children`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(childData)
@@ -128,7 +129,7 @@ function ParentDashboard() {
 
     try {
       // First get prediction
-      const response = await fetch("http://127.0.0.1:5000/predict", {
+      const response = await fetch(`${API_URL}/predict`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sex, age, weight, height }),
@@ -140,7 +141,7 @@ function ParentDashboard() {
 
       // If child is selected, save health record
       if (selectedChild) {
-        const recordRes = await fetch("http://127.0.0.1:5000/health-records", {
+        const recordRes = await fetch(`${API_URL}/health-records`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

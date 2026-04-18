@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUser, logout, getUserName } from "../utils/auth";
 import "../styles/Dashboard.css";
+import API_URL from "../config";
 
 function NutritionWorkerDashboard() {
   const user = getUser();
@@ -36,21 +37,21 @@ function NutritionWorkerDashboard() {
   const loadData = async () => {
     try {
       // Load all children
-      const childrenRes = await fetch("http://127.0.0.1:5000/admin/children");
+      const childrenRes = await fetch(`${API_URL}/admin/children`);
       if (childrenRes.ok) {
         const childrenData = await childrenRes.json();
         setAllChildren(childrenData);
       }
 
       // Load parents
-      const parentsRes = await fetch("http://127.0.0.1:5000/parents");
+      const parentsRes = await fetch(`${API_URL}/parents`);
       if (parentsRes.ok) {
         const parentsData = await parentsRes.json();
         setParents(parentsData);
       }
 
       // Load stats
-      const statsRes = await fetch("http://127.0.0.1:5000/admin/stats");
+      const statsRes = await fetch(`${API_URL}/admin/stats`);
       if (statsRes.ok) {
         const statsData = await statsRes.json();
         setStats(statsData);
@@ -71,7 +72,7 @@ function NutritionWorkerDashboard() {
     setError("");
 
     try {
-      const res = await fetch("http://127.0.0.1:5000/children", {
+      const res = await fetch(`${API_URL}/children`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -115,7 +116,7 @@ function NutritionWorkerDashboard() {
     setAdvice("");
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/predict", {
+      const response = await fetch(`${API_URL}/predict`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sex, age, weight, height }),
@@ -137,7 +138,7 @@ function NutritionWorkerDashboard() {
     if (!selectedChild || !status) return;
 
     try {
-      await fetch("http://127.0.0.1:5000/health-records", {
+      await fetch(`${API_URL}/health-records`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -169,7 +170,7 @@ function NutritionWorkerDashboard() {
     if (!confirm("Are you sure you want to delete this child record?")) return;
     
     try {
-      const res = await fetch(`http://127.0.0.1:5000/children/${childId}`, {
+      const res = await fetch(`${API_URL}/children/${childId}`, {
         method: "DELETE"
       });
       if (res.ok) {
